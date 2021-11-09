@@ -1,45 +1,38 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
 import Modal from '../Modal';
-class ImageGalleryItem extends Component {
-  state = {
-    isModal: false,
-  };
+import { useState } from 'react';
 
-  openModal = event => {
+const ImageGalleryItem = ({ largeImageURL, webformatURL }) => {
+  const [isModal, setIsModal] = useState(false);
+
+  const openModal = event => {
     event.preventDefault();
-    this.setState({ isModal: true });
+    setIsModal(true);
   };
 
-  closeModal = event => {
-    event.target.tagName === 'DIV' && this.setState({ isModal: false });
+  const closeModal = event => {
+    event.target.tagName === 'DIV' && setIsModal(false);
   };
 
-  closeModalByEsc = event => {
-    event.key === 'Escape' && this.setState({ isModal: false });
+  const closeModalByEsc = event => {
+    event.key === 'Escape' && setIsModal(false);
   };
 
-  render() {
-    return (
-      <li className="ImageGalleryItem">
-        {this.state.isModal === true && (
-          <Modal
-            ModalCloseClickHandler={this.closeModal}
-            ModalCloseKeyHandler={this.closeModalByEsc}
-            largePic={this.props.largeImageURL}
-          />
-        )}
-        <a href={this.props.largeImageURL} onClick={this.openModal}>
-          <img
-            src={this.props.webformatURL}
-            alt=""
-            className="ImageGalleryItem-image"
-          />
-        </a>
-      </li>
-    );
-  }
-}
+  return (
+    <li className="ImageGalleryItem">
+      {isModal === true && (
+        <Modal
+          ModalCloseClickHandler={closeModal}
+          ModalCloseKeyHandler={closeModalByEsc}
+          largePic={largeImageURL}
+        />
+      )}
+      <a href={largeImageURL} onClick={openModal}>
+        <img src={webformatURL} alt="" className="ImageGalleryItem-image" />
+      </a>
+    </li>
+  );
+};
 
 ImageGalleryItem.propTypes = {
   largeImageURL: PropTypes.string.isRequired,

@@ -1,25 +1,29 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 
-class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.props.ModalCloseKeyHandler);
-  }
+const Modal = ({ ModalCloseClickHandler, ModalCloseKeyHandler, largePic }) => {
+  useEffect(() => {
+    window.addEventListener('keydown', ModalCloseKeyHandler);
+    // требует зависимость ModalCloseKeyHandler  - но она здесь не нужна.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.props.ModalCloseKeyHandler);
-  }
+  useEffect(() => {
+    return () => {
+      window.removeEventListener('keydown', ModalCloseKeyHandler);
+    };
+    // требует зависимость ModalCloseKeyHandler  - но она здесь не нужна.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  render() {
-    return (
-      <div className="Overlay" onClick={this.props.ModalCloseClickHandler}>
-        <div className="Modal">
-          <img src={this.props.largePic} alt="Large pic" />
-        </div>
+  return (
+    <div className="Overlay" onClick={ModalCloseClickHandler}>
+      <div className="Modal">
+        <img src={largePic} alt="Large pic" />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 Modal.propTypes = {
   ModalCloseClickHandler: PropTypes.func.isRequired,
